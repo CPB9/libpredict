@@ -1,0 +1,32 @@
+src = [
+  'orbit.c',
+  'sun.c',
+  'observer.c',
+  'sdp4.c',
+  'sgp4.c',
+  'refraction.c',
+  'unsorted.c',
+  'julian_date.c',
+  'version.c',
+  'moon.c',
+  predict_h,
+]
+
+cflags = ''
+
+#TODO: windows build
+if host_machine.system() != 'windows'
+  cflags = '-D_DEFAULT_SOURCE'
+endif
+
+predict_lib = static_library('predict',
+  name_prefix : 'lib',
+  sources : src,
+  include_directories : include_directories('../include'),
+  c_args : cflags,
+)
+
+predict_dep = declare_dependency(
+  link_with : predict_lib,
+  include_directories : include_directories('../include', is_system : true),
+)
