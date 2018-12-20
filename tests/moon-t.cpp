@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <vector>
 #include <math.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <limits>
+
+#ifndef _MSC_VER
+#include <unistd.h>
+#endif
+
 #include <predict/predict.h>
 
 #include "testcase_reader.h"

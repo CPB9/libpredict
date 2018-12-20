@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include "defs.h"
 
+//gmtime and localtime are thread safe in microsoft CRT
+
 /**
  * Create time_t in UTC from struct tm.
  *
@@ -16,12 +18,20 @@ time_t mktime_utc(const struct tm* timeinfo_utc)
 
 	//get UTC time, interpret resulting tm as a localtime
 	struct tm timeinfo_gmt;
+#ifdef _MSC_VER
+	gmtime_s(&timeinfo_gmt, &curr_time);
+#else
 	gmtime_r(&curr_time, &timeinfo_gmt);
+#endif
 	time_t time_gmt = mktime(&timeinfo_gmt);
 
 	//get localtime, interpret resulting tm as localtime
 	struct tm timeinfo_local;
+#ifdef _MSC_VER
+	localtime_s(&timeinfo_local, &curr_time);
+#else
 	localtime_r(&curr_time, &timeinfo_local);
+#endif
 	time_t time_local = mktime(&timeinfo_local);
 
 	//find the time difference between the two interpretations
@@ -68,10 +78,14 @@ time_t predict_from_julian(predict_julian_date_t date)
 {
 	double seconds_since = date*SECONDS_PER_DAY;
 	time_t ret_time = get_julian_start_day();
-	
+
 	//add number of seconds since julian start day to the julian start day, get current time_t
 	struct tm timeinfo;
-	gmtime_r(&ret_time, &timeinfo); 
+#ifdef _MSC_VER
+	gmtime_s(&timeinfo, &ret_time);
+#else
+	gmtime_r(&ret_time, &timeinfo);
+#endif
 	timeinfo.tm_sec += seconds_since;
 	ret_time = mktime_utc(&timeinfo);
 	return ret_time;

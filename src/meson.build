@@ -12,20 +12,24 @@ src = [
   predict_h,
 ]
 
-cflags = ''
+predict_cflags = []
+deps = []
 
 #TODO: windows build
 if host_machine.system() == 'windows'
-  cflags = '-D_USE_MATH_DEFINES'
+  predict_cflags += '-D_USE_MATH_DEFINES'
 else
-  cflags = '-D_DEFAULT_SOURCE'
+  predict_cflags += '-D_DEFAULT_SOURCE'
+  cc = meson.get_compiler('c')
+  deps += cc.find_library('m')
 endif
 
 predict_lib = static_library('predict',
   name_prefix : 'lib',
   sources : src,
   include_directories : include_directories('../include'),
-  c_args : cflags,
+  c_args : predict_cflags,
+  dependencies : deps,
 )
 
 predict_dep = declare_dependency(

@@ -1,9 +1,13 @@
 #include <stdio.h>
 #include <vector>
 #include <math.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <limits>
+
+#ifndef _MSC_VER
+#include <unistd.h>
+#endif
+
 #include <predict/predict.h>
 
 #include "testcase_reader.h"
@@ -43,7 +47,7 @@ int runtest(const char *filename)
 		fprintf(stderr, "Failed to load testfile: %s\n", filename);
 		return -1;
 	}
-	
+
 	// Create observer object
 	predict_observer_t *obs = predict_create_observer("test", testcase.latitude()*M_PI/180.0, testcase.longitude()*M_PI/180.0, testcase.altitude());
 	if (!obs) {
@@ -105,7 +109,7 @@ int runtest(const char *filename)
 
 		// Failed?
 		if (failed != "") {
-			
+
 			cout << filename << ": failed at data line " << line << ": " << failed << endl;
 
 			printf("%.8f, %.8f/%.8f/%.8f, %.8f/%.8f/%.8f, "

@@ -1,10 +1,13 @@
 #include <stdio.h>
 #include <vector>
 #include <math.h>
-#include <unistd.h>
 #include <stdlib.h>
-#include <predict/predict.h>
 
+#ifndef _MSC_VER
+#include <unistd.h>
+#endif
+
+#include <predict/predict.h>
 #include "testcase_reader.h"
 
 #include <iostream>
@@ -65,7 +68,7 @@ int runtest(const char *filename)
 	}
 
 	bool check_squint_angle = testcase.containsValidAlonAlat() && (orbital_elements->ephemeris == EPHEMERIS_SDP4);
-	
+
 	// Test
 	int retval = 0;
 	int line = 1;
