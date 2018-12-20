@@ -15,7 +15,9 @@ src = [
 cflags = ''
 
 #TODO: windows build
-if host_machine.system() != 'windows'
+if host_machine.system() == 'windows'
+  cflags = '-D_USE_MATH_DEFINES'
+else
   cflags = '-D_DEFAULT_SOURCE'
 endif
 

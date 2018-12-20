@@ -6,9 +6,12 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
 #include <time.h>
+
+#ifndef _MSC_VER
+#include <sys/time.h>
 #include <unistd.h>
+#endif
 
 /**
  * Set three-element vector to specified components.
